@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Activity - SwagPlan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <div class="top-bar" id="top-bar" style="display: none;">
+        <div class="top-bar-left">
+            <div class="app-title">SwagPlan</div>
+            <div class="user-display">
+                <div class="user-avatar" id="user-avatar"></div>
+                <span id="top-user-name"></span>
+            </div>
+        </div>
+        <div class="top-bar-actions">
+            <a href="users.html" class="top-admin-link" id="top-admin-link" style="display: none;">👥 Manage Users</a>
+            <button class="top-logout-btn" id="top-logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="auth-section">
+            <div id="login-section" style="display: none;">
+                <div style="text-align: center; padding: 3rem;">
+                    <h1 style="margin-bottom: 2rem;">Welcome to SwagPlan</h1>
+                    <p style="margin-bottom: 2rem; color: #7f8c8d;">Please login to manage your group activities</p>
+                    <button id="facebook-login-btn">Login with Facebook</button>
+                    
+                    <div style="margin-top: 2rem; font-size: 0.9em;">
+                        <a href="privacy-policy.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Privacy Policy</a>
+                        <a href="data-deletion.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Data Deletion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navigation">
+            <a href="index.html" class="nav-link">← Back to Activities</a>
+        </nav>
+
+        <main id="main-content" style="display: none;">
+            <section class="schedule-activity">
+                <h2>Schedule New Activity</h2>
+                <form id="new-activity-form">
+                    <div class="form-group">
+                        <label for="activity-title">Activity Title</label>
+                        <input type="text" id="activity-title" placeholder="Enter activity title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activity-date">Date</label>
+                        <input type="date" id="activity-date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activity-responsible">Responsible Person (optional)</label>
+                        <input type="text" id="activity-responsible" placeholder="Enter name of person responsible">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activity-notes">Notes (optional)</label>
+                        <textarea id="activity-notes" placeholder="Add any additional notes or details about the activity" rows="5"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Create Activity</button>
+                        <a href="index.html" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </section>
+
+            <section class="bulk-schedule">
+                <h2>Bulk Schedule Activities</h2>
+                <p>Create 8 "Loge Activity" events starting from a selected month, each spaced 2 months apart.</p>
+                <form id="bulk-schedule-form">
+                    <div class="form-group">
+                        <label for="start-month">Starting Month</label>
+                        <input type="month" id="start-month" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Create 8 Activities</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="session.js"></script>
+    <script src="schedule.js"></script>
+</body>
+</html>

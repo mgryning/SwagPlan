@@ -1,0 +1,61 @@
+name: Daily Activity Reminders
+
+on:
+  schedule:
+    # Run daily at 3:00 AM UTC
+    - cron: '0 3 * * *'
+  
+  # Allow manual triggering from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Send activity reminders
+        run: |
+          echo "🔔 Calling reminder endpoint..."
+          
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://swagplan.fly.dev/api/send-reminders?token=${{ secrets.REMINDER_TOKEN }}")
+          
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n -1)
+          
+          echo "📤 Response code: $http_code"
+          echo "📧 Response body: $body"
+          
+          if [ "$http_code" -eq 200 ]; then
+            echo "✅ Reminders sent successfully!"
+          else
+            echo "❌ Failed to send reminders (HTTP $http_code)"
+            exit 1
+          fi
+
+  # Optional: Test endpoint that redirects emails to you
+  test-reminders:
+    runs-on: ubuntu-latest
+    # Only run when manually triggered
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Send test reminders (emails to mortengryning@gmail.com)
+        run: |
+          echo "🧪 Calling TEST reminder endpoint..."
+          
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://swagplan.fly.dev/api/send-reminders/test?token=${{ secrets.REMINDER_TOKEN }}")
+          
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n -1)
+          
+          echo "📤 Response code: $http_code"
+          echo "📧 Response body: $body"
+          
+          if [ "$http_code" -eq 200 ]; then
+            echo "✅ Test reminders sent successfully!"
+          else
+            echo "❌ Failed to send test reminders (HTTP $http_code)"
+            exit 1
+          fi

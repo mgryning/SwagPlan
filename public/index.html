@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwagPlan - Activity Planning System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <div class="top-bar" id="top-bar" style="display: none;">
+        <div class="top-bar-left">
+            <div class="app-title">SwagPlan</div>
+            <div class="user-display">
+                <div class="user-avatar" id="user-avatar"></div>
+                <span id="top-user-name"></span>
+            </div>
+        </div>
+        <div class="top-bar-actions">
+            <a href="users.html" class="top-admin-link" id="top-admin-link" style="display: none;">👥 Manage Users</a>
+            <button class="top-logout-btn" id="top-logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="auth-section">
+            <div id="login-section" style="display: none;">
+                <div style="text-align: center; padding: 3rem;">
+                    <h1 style="margin-bottom: 2rem;">Welcome to SwagPlan</h1>
+                    <p style="margin-bottom: 2rem; color: #7f8c8d;">Please login to manage your group activities</p>
+                    <button id="facebook-login-btn">Login with Facebook</button>
+                    
+                    <div style="margin-top: 2rem; font-size: 0.9em;">
+                        <a href="privacy-policy.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Privacy Policy</a>
+                        <a href="data-deletion.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Data Deletion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main id="main-content" style="display: none;">
+            <section class="activities-overview">
+                <div class="section-header">
+                    <h2>Activities Overview</h2>
+                    <a href="schedule.html" class="btn btn-primary">+ Schedule New Activity</a>
+                </div>
+                <div class="activities-columns">
+                    <div class="activities-column">
+                        <h3>Upcoming Activities</h3>
+                        <div id="upcoming-activities-list"></div>
+                    </div>
+                    <div class="activities-column">
+                        <h3>Held Activities</h3>
+                        <div id="held-activities-list"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="session.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

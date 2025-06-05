@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - SwagPlan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <div class="top-bar" id="top-bar" style="display: none;">
+        <div class="top-bar-left">
+            <div class="app-title">SwagPlan</div>
+            <div class="user-display">
+                <div class="user-avatar" id="user-avatar"></div>
+                <span id="top-user-name"></span>
+            </div>
+        </div>
+        <div class="top-bar-actions">
+            <a href="users.html" class="top-admin-link" id="top-admin-link" style="display: none;">👥 Manage Users</a>
+            <button class="top-logout-btn" id="top-logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="auth-section">
+            <div id="login-section" style="display: none;">
+                <div style="text-align: center; padding: 3rem;">
+                    <h1 style="margin-bottom: 2rem;">Welcome to SwagPlan</h1>
+                    <p style="margin-bottom: 2rem; color: #7f8c8d;">Please login to manage your group activities</p>
+                    <button id="facebook-login-btn">Login with Facebook</button>
+                    
+                    <div style="margin-top: 2rem; font-size: 0.9em;">
+                        <a href="privacy-policy.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Privacy Policy</a>
+                        <a href="data-deletion.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Data Deletion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="access-denied" style="display: none;">
+            <div style="text-align: center; padding: 3rem;">
+                <h1 style="color: #e74c3c;">Access Denied</h1>
+                <p style="margin-bottom: 2rem; color: #7f8c8d;">You don't have permission to access this page.</p>
+                <a href="index.html" class="btn btn-primary">Go to Activities</a>
+            </div>
+        </div>
+
+        <nav class="navigation" id="navigation" style="display: none;">
+            <a href="index.html" class="nav-link">← Back to Activities</a>
+        </nav>
+
+        <main id="main-content" style="display: none;">
+            <section class="user-management">
+                <h2>User Management</h2>
+                <p style="margin-bottom: 2rem; color: #7f8c8d;">Manage registered users and their email addresses.</p>
+                
+                <div id="users-list" class="users-list">
+                    <!-- Users will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="session.js"></script>
+    <script src="users.js"></script>
+</body>
+</html>
