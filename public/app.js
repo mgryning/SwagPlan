@@ -126,95 +126,76 @@ function renderActivities() {
     }
 
     function renderActivityCard(activity) {
-        const isParticipant = activity.participants.includes(currentUser.id);
         const isCurrentUserResponsible = activity.responsible === currentUser.id;
         const hasResponsiblePerson = activity.responsible && activity.responsible.trim() !== '';
         const responsibleName = getUserName(activity.responsible);
         const canManage = currentUser.isAdmin || isCurrentUserResponsible;
         const participantCount = activity.participants.length;
 
-        const statusDisplay = activity.status === 'held'
-            ? 'Held'
-            : activity.status === 'skipped'
-                ? 'Skipped'
-                : 'Planned';
-        const statusClass = activity.status === 'held'
-            ? 'status-held'
-            : activity.status === 'skipped'
-                ? 'status-skipped'
-                : 'status-planned';
+        const statusDisplay = activity.status === 'held' ? 'Held'
+            : activity.status === 'skipped' ? 'Skipped'
+            : 'Planned';
+        const statusClass = activity.status === 'held' ? 'status-held'
+            : activity.status === 'skipped' ? 'status-skipped'
+            : 'status-planned';
 
         const dateObject = new Date(activity.date);
         const monthLabel = dateObject.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
         const dayLabel = dateObject.toLocaleDateString('en-US', { day: '2-digit' });
-        const fullDateLabel = dateObject.toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-        });
+        const weekdayLabel = dateObject.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+
+        const ownerText = hasResponsiblePerson ? responsibleName : 'No owner';
+        const ownerClass = hasResponsiblePerson ? 'meta-owner-assigned' : 'meta-owner-unassigned';
+
+        const cardClasses = [
+            'activity-card',
+            activity.status === 'held' ? 'activity-held' : '',
+            activity.status === 'skipped' ? 'activity-skipped' : '',
+            activity.status === 'planned' ? (hasResponsiblePerson ? 'has-responsible' : 'no-responsible') : ''
+        ].filter(Boolean).join(' ');
+
+        const actionButtons = [];
+
+        if (activity.status === 'planned') {
+            if (isCurrentUserResponsible) {
+                actionButtons.push(`<button class="btn btn-danger" onclick="leaveActivity('${activity.id}')">Leave</button>`);
+            } else if (!hasResponsiblePerson) {
+                actionButtons.push(`<button class="btn btn-primary" onclick="joinActivity('${activity.id}')">Take ownership</button>`);
+            }
+            if (canManage) {
+                actionButtons.push(`<button class="btn btn-secondary" onclick="markAsHeld('${activity.id}')">Mark held</button>`);
+                actionButtons.push(`<button class="btn btn-warning" onclick="markAsSkipped('${activity.id}')">Skip</button>`);
+            }
+        }
+
+        if (canManage && (activity.status === 'held' || activity.status === 'skipped')) {
+            actionButtons.push(`<button class="btn btn-primary" onclick="markAsPlanned('${activity.id}')">Reopen</button>`);
+        }
+
+        if (currentUser.isAdmin) {
+            actionButtons.push(`<button class="btn btn-danger" onclick="deleteActivity('${activity.id}')">Delete</button>`);
+        }
 
         return `
-            <div class="activity-card ${activity.status === 'held' ? 'activity-held' : activity.status === 'skipped' ? 'activity-skipped' : ''} ${activity.status === 'planned' ? (hasResponsiblePerson ? 'has-responsible' : 'no-responsible') : ''}">
+            <div class="${cardClasses}">
                 <div class="activity-header">
                     <div class="activity-date-block">
                         <span class="activity-date-month">${monthLabel}</span>
                         <span class="activity-date-day">${dayLabel}</span>
+                        <span class="activity-date-weekday">${weekdayLabel}</span>
                     </div>
-                    <div class="activity-title-section">
-                        <div class="activity-card-topline">
-                            <span class="activity-flow-tag">${activity.status === 'planned' ? 'Plan' : 'Archive'}</span>
-                            <span class="activity-participant-tag">${participantCount} ${participantCount === 1 ? 'person' : 'people'}</span>
-                        </div>
+                    <div class="activity-body">
                         <div class="activity-title">${activity.title}</div>
-                        <div class="activity-subline">${fullDateLabel}</div>
+                        <div class="activity-meta">
+                            <span class="${ownerClass}">${ownerText}</span>
+                            <span class="meta-sep">·</span>
+                            <span class="meta-participants">${participantCount} ${participantCount === 1 ? 'person' : 'people'}</span>
+                        </div>
+                        ${activity.notes ? `<p class="activity-note">${activity.notes}</p>` : ''}
                     </div>
-                    <div class="activity-status">
-                        <span class="status-badge ${statusClass}">
-                            ${activity.status === 'held' ? '✅' : activity.status === 'skipped' ? '⏭️' : '📅'} ${statusDisplay}
-                        </span>
-                    </div>
+                    <span class="status-badge ${statusClass}">${statusDisplay}</span>
                 </div>
-
-                <div class="activity-details">
-                    <div class="activity-date">
-                        <span class="detail-label">Schedule</span>
-                        <span class="detail-text">${fullDateLabel}</span>
-                    </div>
-
-                    <div class="activity-responsible">
-                        <span class="detail-label">Owner</span>
-                        <span class="detail-text ${hasResponsiblePerson ? 'has-person' : 'no-person'}">
-                            ${hasResponsiblePerson ? `${responsibleName} is responsible` : 'No one assigned yet'}
-                        </span>
-                    </div>
-
-                    ${activity.notes ? `<div class="activity-notes">
-                        <span class="detail-label">Notes</span>
-                        <span class="detail-text">${activity.notes}</span>
-                    </div>` : ''}
-                </div>
-                <div class="activity-actions">
-                    ${isCurrentUserResponsible && activity.status === 'planned'
-                        ? `<button class="btn btn-danger" onclick="leaveActivity('${activity.id}')"><span>👋</span> Leave</button>`
-                        : (!hasResponsiblePerson && activity.status === 'planned'
-                            ? `<button class="btn btn-primary" onclick="joinActivity('${activity.id}')"><span>🙋‍♂️</span> Take ownership</button>`
-                            : '')
-                    }
-                    ${canManage && activity.status === 'planned'
-                        ? `<button class="btn btn-secondary" onclick="markAsHeld('${activity.id}')"><span>✅</span> Mark held</button>
-                           <button class="btn btn-warning" onclick="markAsSkipped('${activity.id}')"><span>⏭️</span> Skip</button>`
-                        : ''
-                    }
-                    ${canManage && (activity.status === 'held' || activity.status === 'skipped')
-                        ? `<button class="btn btn-primary" onclick="markAsPlanned('${activity.id}')"><span>📅</span> Reopen</button>`
-                        : ''
-                    }
-                    ${currentUser.isAdmin
-                        ? `<button class="btn btn-danger" onclick="deleteActivity('${activity.id}')"><span>🗑️</span> Delete</button>`
-                        : ''
-                    }
-                </div>
+                ${actionButtons.length > 0 ? `<div class="activity-actions">${actionButtons.join('')}</div>` : ''}
             </div>
         `;
     }
@@ -274,6 +255,11 @@ async function deleteActivity(activityId) {
     }, 'Unable to delete activity');
 }
 
+function toggleArchiveColumn() {
+    document.getElementById('archive-column').classList.toggle('collapsed');
+}
+
+window.toggleArchiveColumn = toggleArchiveColumn;
 window.joinActivity = joinActivity;
 window.leaveActivity = leaveActivity;
 window.markAsHeld = markAsHeld;

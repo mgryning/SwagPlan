@@ -123,10 +123,13 @@
                         </div>
                         <div id="upcoming-activities-list"></div>
                     </div>
-                    <div class="activities-column archive-column">
-                        <div class="column-header">
+                    <div class="activities-column archive-column collapsed" id="archive-column">
+                        <div class="column-header column-header-toggle" onclick="toggleArchiveColumn()">
                             <h3>Held Activities</h3>
-                            <span class="column-count" id="held-column-count">0</span>
+                            <div class="column-header-right">
+                                <span class="column-count" id="held-column-count">0</span>
+                                <span class="column-chevron">›</span>
+                            </div>
                         </div>
                         <div id="held-activities-list"></div>
                     </div>
