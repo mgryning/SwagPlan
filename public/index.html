@@ -91,17 +91,43 @@
 
         <main id="main-content" style="display: none;">
             <section class="activities-overview">
-                <div class="section-header">
-                    <h2>Activities Overview</h2>
-                    <a href="schedule.html" class="btn btn-primary">+ Schedule New Activity</a>
+                <div class="overview-hero">
+                    <div class="overview-copy">
+                        <div class="overview-kicker">Activity Board</div>
+                        <div class="overview-heading-row">
+                            <h2>Activities Overview</h2>
+                            <a href="schedule.html" class="btn btn-primary overview-cta">+ Schedule New Activity</a>
+                        </div>
+                        <p id="overview-summary">A clean view of upcoming plans, ownership, and recent history.</p>
+                    </div>
+                    <div class="overview-stats">
+                        <div class="overview-stat-card">
+                            <span class="overview-stat-label">Upcoming</span>
+                            <strong class="overview-stat-value" id="overview-upcoming-count">0</strong>
+                        </div>
+                        <div class="overview-stat-card">
+                            <span class="overview-stat-label">Need Owner</span>
+                            <strong class="overview-stat-value" id="overview-open-count">0</strong>
+                        </div>
+                        <div class="overview-stat-card">
+                            <span class="overview-stat-label">Recently Closed</span>
+                            <strong class="overview-stat-value" id="overview-held-count">0</strong>
+                        </div>
+                    </div>
                 </div>
                 <div class="activities-columns">
-                    <div class="activities-column">
-                        <h3>Upcoming Activities</h3>
+                    <div class="activities-column upcoming-column">
+                        <div class="column-header">
+                            <h3>Upcoming Activities</h3>
+                            <span class="column-count" id="upcoming-column-count">0</span>
+                        </div>
                         <div id="upcoming-activities-list"></div>
                     </div>
-                    <div class="activities-column">
-                        <h3>Held Activities</h3>
+                    <div class="activities-column archive-column">
+                        <div class="column-header">
+                            <h3>Held Activities</h3>
+                            <span class="column-count" id="held-column-count">0</span>
+                        </div>
                         <div id="held-activities-list"></div>
                     </div>
                 </div>

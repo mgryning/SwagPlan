@@ -83,12 +83,12 @@ async function loadActivities() {
 function renderActivities() {
     const upcomingList = document.getElementById('upcoming-activities-list');
     const heldList = document.getElementById('held-activities-list');
-
-    if (activities.length === 0) {
-        upcomingList.innerHTML = '<div class="empty-state">No upcoming activities. Create the first one!</div>';
-        heldList.innerHTML = '<div class="empty-state">No held activities yet.</div>';
-        return;
-    }
+    const overviewUpcomingCount = document.getElementById('overview-upcoming-count');
+    const overviewOpenCount = document.getElementById('overview-open-count');
+    const overviewHeldCount = document.getElementById('overview-held-count');
+    const upcomingColumnCount = document.getElementById('upcoming-column-count');
+    const heldColumnCount = document.getElementById('held-column-count');
+    const overviewSummary = document.getElementById('overview-summary');
 
     const upcomingActivities = activities
         .filter((activity) => activity.status === 'planned')
@@ -99,12 +99,39 @@ function renderActivities() {
         .sort((left, right) => new Date(right.date) - new Date(left.date))
         .slice(0, 5);
 
+    const openResponsibilities = upcomingActivities.filter((activity) => !activity.responsible).length;
+    const nextUpcoming = upcomingActivities[0];
+
+    overviewUpcomingCount.textContent = String(upcomingActivities.length);
+    overviewOpenCount.textContent = String(openResponsibilities);
+    overviewHeldCount.textContent = String(heldActivities.length);
+    upcomingColumnCount.textContent = String(upcomingActivities.length);
+    heldColumnCount.textContent = String(heldActivities.length);
+
+    if (nextUpcoming) {
+        const nextDate = new Date(nextUpcoming.date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        overviewSummary.textContent = `${upcomingActivities.length} upcoming activities. Next up is ${nextUpcoming.title} on ${nextDate}.`;
+    } else {
+        overviewSummary.textContent = 'No upcoming plans yet. Schedule the first activity to start the board.';
+    }
+
+    if (activities.length === 0) {
+        upcomingList.innerHTML = '<div class="empty-state">No upcoming activities. Create the first one!</div>';
+        heldList.innerHTML = '<div class="empty-state">No held activities yet.</div>';
+        return;
+    }
+
     function renderActivityCard(activity) {
         const isParticipant = activity.participants.includes(currentUser.id);
         const isCurrentUserResponsible = activity.responsible === currentUser.id;
         const hasResponsiblePerson = activity.responsible && activity.responsible.trim() !== '';
         const responsibleName = getUserName(activity.responsible);
         const canManage = currentUser.isAdmin || isCurrentUserResponsible;
+        const participantCount = activity.participants.length;
 
         const statusDisplay = activity.status === 'held'
             ? 'Held'
@@ -117,57 +144,70 @@ function renderActivities() {
                 ? 'status-skipped'
                 : 'status-planned';
 
+        const dateObject = new Date(activity.date);
+        const monthLabel = dateObject.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+        const dayLabel = dateObject.toLocaleDateString('en-US', { day: '2-digit' });
+        const fullDateLabel = dateObject.toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+
         return `
             <div class="activity-card ${activity.status === 'held' ? 'activity-held' : activity.status === 'skipped' ? 'activity-skipped' : ''} ${activity.status === 'planned' ? (hasResponsiblePerson ? 'has-responsible' : 'no-responsible') : ''}">
                 <div class="activity-header">
-                    <div class="activity-title-section">
-                        <div class="activity-icon">🎯</div>
-                        <div class="activity-title">${activity.title}</div>
+                    <div class="activity-date-block">
+                        <span class="activity-date-month">${monthLabel}</span>
+                        <span class="activity-date-day">${dayLabel}</span>
                     </div>
-                    ${activity.status !== 'planned' ? `<div class="activity-status">
+                    <div class="activity-title-section">
+                        <div class="activity-card-topline">
+                            <span class="activity-flow-tag">${activity.status === 'planned' ? 'Plan' : 'Archive'}</span>
+                            <span class="activity-participant-tag">${participantCount} ${participantCount === 1 ? 'person' : 'people'}</span>
+                        </div>
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-subline">${fullDateLabel}</div>
+                    </div>
+                    <div class="activity-status">
                         <span class="status-badge ${statusClass}">
                             ${activity.status === 'held' ? '✅' : activity.status === 'skipped' ? '⏭️' : '📅'} ${statusDisplay}
                         </span>
-                    </div>` : ''}
+                    </div>
                 </div>
 
                 <div class="activity-details">
                     <div class="activity-date">
-                        <span class="detail-icon">📅</span>
-                        <span class="detail-text">${new Date(activity.date).toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric'
-                        })}</span>
+                        <span class="detail-label">Schedule</span>
+                        <span class="detail-text">${fullDateLabel}</span>
                     </div>
 
                     <div class="activity-responsible">
-                        <span class="detail-icon">${hasResponsiblePerson ? '👤' : '❓'}</span>
+                        <span class="detail-label">Owner</span>
                         <span class="detail-text ${hasResponsiblePerson ? 'has-person' : 'no-person'}">
                             ${hasResponsiblePerson ? `${responsibleName} is responsible` : 'No one assigned yet'}
                         </span>
                     </div>
 
                     ${activity.notes ? `<div class="activity-notes">
-                        <span class="detail-icon">📝</span>
+                        <span class="detail-label">Notes</span>
                         <span class="detail-text">${activity.notes}</span>
                     </div>` : ''}
                 </div>
                 <div class="activity-actions">
                     ${isCurrentUserResponsible && activity.status === 'planned'
-                        ? `<button class="btn btn-danger" onclick="leaveActivity('${activity.id}')"><span>👋</span> Leave Activity</button>`
+                        ? `<button class="btn btn-danger" onclick="leaveActivity('${activity.id}')"><span>👋</span> Leave</button>`
                         : (!hasResponsiblePerson && activity.status === 'planned'
-                            ? `<button class="btn btn-primary" onclick="joinActivity('${activity.id}')"><span>🙋‍♂️</span> Make me responsible</button>`
+                            ? `<button class="btn btn-primary" onclick="joinActivity('${activity.id}')"><span>🙋‍♂️</span> Take ownership</button>`
                             : '')
                     }
                     ${canManage && activity.status === 'planned'
-                        ? `<button class="btn btn-secondary" onclick="markAsHeld('${activity.id}')"><span>✅</span> Mark as Held</button>
-                           <button class="btn btn-warning" onclick="markAsSkipped('${activity.id}')"><span>⏭️</span> Mark as Skipped</button>`
+                        ? `<button class="btn btn-secondary" onclick="markAsHeld('${activity.id}')"><span>✅</span> Mark held</button>
+                           <button class="btn btn-warning" onclick="markAsSkipped('${activity.id}')"><span>⏭️</span> Skip</button>`
                         : ''
                     }
                     ${canManage && (activity.status === 'held' || activity.status === 'skipped')
-                        ? `<button class="btn btn-primary" onclick="markAsPlanned('${activity.id}')"><span>📅</span> Mark as Planned</button>`
+                        ? `<button class="btn btn-primary" onclick="markAsPlanned('${activity.id}')"><span>📅</span> Reopen</button>`
                         : ''
                     }
                     ${currentUser.isAdmin

@@ -1,6 +1,8 @@
 (function authClientBootstrap() {
     const FB_APP_ID = window.SWAGPLAN_FACEBOOK_APP_ID || '1249474143244692';
     const FB_VERSION = 'v23.0';
+    const FACEBOOK_STATE_KEY = 'swagplan_facebook_oauth_state';
+    const FACEBOOK_RETURN_KEY = 'swagplan_facebook_return_to';
 
     const state = {
         currentUser: null,
@@ -101,6 +103,107 @@
         if (adminLink) {
             adminLink.style.display = user && user.isAdmin ? 'inline-block' : 'none';
         }
+    }
+
+    function isMobileViewport() {
+        return window.matchMedia('(max-width: 900px)').matches;
+    }
+
+    function isLikelyEmbeddedBrowser() {
+        const userAgent = navigator.userAgent || '';
+        const normalized = userAgent.toLowerCase();
+
+        return (
+            normalized.includes('fban') ||
+            normalized.includes('fbav') ||
+            normalized.includes('instagram') ||
+            normalized.includes('line/') ||
+            normalized.includes('wv') ||
+            normalized.includes('messenger')
+        );
+    }
+
+    function shouldUseFacebookRedirectFlow() {
+        return isMobileViewport() || isLikelyEmbeddedBrowser();
+    }
+
+    function generateOauthState() {
+        const bytes = new Uint8Array(16);
+        crypto.getRandomValues(bytes);
+        return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    function buildFacebookRedirectUrl() {
+        const stateToken = generateOauthState();
+        sessionStorage.setItem(FACEBOOK_STATE_KEY, stateToken);
+        sessionStorage.setItem(FACEBOOK_RETURN_KEY, `${window.location.pathname}${window.location.search}${window.location.hash}`);
+
+        const redirectUrl = new URL(`https://www.facebook.com/${FB_VERSION}/dialog/oauth`);
+        redirectUrl.searchParams.set('client_id', FB_APP_ID);
+        redirectUrl.searchParams.set('redirect_uri', `${window.location.origin}/facebook-login-callback.html`);
+        redirectUrl.searchParams.set('response_type', 'token');
+        redirectUrl.searchParams.set('scope', 'public_profile,email');
+        redirectUrl.searchParams.set('state', stateToken);
+
+        if (isMobileViewport()) {
+            redirectUrl.searchParams.set('display', 'touch');
+        }
+
+        return redirectUrl.toString();
+    }
+
+    function startFacebookRedirectLogin() {
+        window.location.assign(buildFacebookRedirectUrl());
+    }
+
+    function getStoredFacebookReturnPath() {
+        return sessionStorage.getItem(FACEBOOK_RETURN_KEY) || '/';
+    }
+
+    function clearFacebookRedirectState() {
+        sessionStorage.removeItem(FACEBOOK_STATE_KEY);
+        sessionStorage.removeItem(FACEBOOK_RETURN_KEY);
+    }
+
+    function readFacebookCallbackHash() {
+        const hash = window.location.hash.startsWith('#')
+            ? window.location.hash.slice(1)
+            : window.location.hash;
+        return new URLSearchParams(hash);
+    }
+
+    async function completeFacebookRedirectLogin() {
+        const params = readFacebookCallbackHash();
+        const accessToken = params.get('access_token');
+        const incomingState = params.get('state');
+        const storedState = sessionStorage.getItem(FACEBOOK_STATE_KEY);
+        const returnTo = getStoredFacebookReturnPath();
+        const errorReason = params.get('error_reason') || params.get('error_description');
+
+        if (errorReason) {
+            throw new Error(errorReason.replace(/\+/g, ' '));
+        }
+
+        if (!accessToken) {
+            throw new Error('Facebook did not return an access token');
+        }
+
+        if (!incomingState || !storedState || incomingState !== storedState) {
+            throw new Error('Facebook login state could not be validated');
+        }
+
+        const result = await requestJson('/api/auth/facebook', {
+            method: 'POST',
+            body: JSON.stringify({
+                accessToken
+            })
+        });
+
+        clearFacebookRedirectState();
+        return {
+            user: result.user,
+            returnTo
+        };
     }
 
     function loadFacebookSdk() {
@@ -250,6 +353,14 @@
                 facebookButton.disabled = true;
 
                 try {
+                    if (shouldUseFacebookRedirectFlow()) {
+                        if (isLikelyEmbeddedBrowser()) {
+                            showAuthMessage('Redirecting to Facebook login. If the in-app browser blocks it, open SwagPlan in Safari or Chrome.', 'success');
+                        }
+                        startFacebookRedirectLogin();
+                        return;
+                    }
+
                     const user = await signInWithFacebook();
                     if (requireAdmin && !user.isAdmin) {
                         showAccessDenied?.();
@@ -381,12 +492,16 @@
     }
 
     window.SwagAuth = {
+        clearFacebookRedirectState,
+        completeFacebookRedirectLogin,
         clearAuthMessage,
         getCurrentUser,
+        getStoredFacebookReturnPath,
         initializePage,
         requestPasswordReset,
         requestJson,
         resetPassword,
+        shouldUseFacebookRedirectFlow,
         showAuthMessage,
         validateResetToken,
         updateTopBar

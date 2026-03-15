@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signing in with Facebook - SwagPlan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="login-section">
+            <div class="auth-shell">
+                <div class="auth-intro">
+                    <h1>Finishing Facebook sign-in</h1>
+                    <p id="facebook-callback-copy">Please wait while we connect your SwagPlan account.</p>
+                </div>
+                <div id="auth-feedback"></div>
+                <div class="auth-grid" style="grid-template-columns: minmax(0, 520px); justify-content: center;">
+                    <section class="auth-card">
+                        <div class="empty-state">You will be redirected automatically.</div>
+                        <div class="auth-links">
+                            <a href="index.html">Back to SwagPlan</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth-client.js"></script>
+    <script src="facebook-login-callback.js"></script>
+</body>
+</html>
