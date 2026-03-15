@@ -26,14 +26,64 @@
     <div class="container">
         <div id="auth-section">
             <div id="login-section" style="display: none;">
-                <div style="text-align: center; padding: 3rem;">
-                    <h1 style="margin-bottom: 2rem;">Welcome to SwagPlan</h1>
-                    <p style="margin-bottom: 2rem; color: #7f8c8d;">Please login to manage your group activities</p>
-                    <button id="facebook-login-btn">Login with Facebook</button>
-                    
-                    <div style="margin-top: 2rem; font-size: 0.9em;">
-                        <a href="privacy-policy.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Privacy Policy</a>
-                        <a href="data-deletion.html" style="color: #7f8c8d; text-decoration: none; margin: 0 1rem;">Data Deletion</a>
+                <div class="auth-shell">
+                    <div class="auth-intro">
+                        <h1>Welcome to SwagPlan</h1>
+                        <p>Log in with Facebook or sign in with your own email and password.</p>
+                    </div>
+
+                    <div id="auth-feedback"></div>
+
+                    <div class="auth-grid">
+                        <section class="auth-card">
+                            <h2>Sign in</h2>
+                            <button id="facebook-login-btn" class="auth-facebook-btn">Continue with Facebook</button>
+                            <div class="auth-divider"><span>or</span></div>
+                            <form id="local-login-form" class="auth-form">
+                                <div class="form-group">
+                                    <label for="login-email">Email</label>
+                                    <input type="email" id="login-email" placeholder="you@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="login-password">Password</label>
+                                    <input type="password" id="login-password" placeholder="Your password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary auth-submit-btn">Sign in</button>
+                            </form>
+                            <a href="#" id="forgot-password-toggle" class="auth-inline-link">Forgot password?</a>
+                            <form id="forgot-password-form" class="auth-form auth-inline-form" style="display: none;">
+                                <div class="form-group">
+                                    <label for="forgot-email">Reset email</label>
+                                    <input type="email" id="forgot-email" placeholder="you@example.com" required>
+                                </div>
+                                <button type="submit" class="btn btn-secondary auth-submit-btn">Send reset link</button>
+                            </form>
+                        </section>
+
+                        <section class="auth-card">
+                            <h2>Request local access</h2>
+                            <p class="auth-card-copy">New local accounts need admin approval before they can log in.</p>
+                            <form id="signup-form" class="auth-form">
+                                <div class="form-group">
+                                    <label for="signup-name">Full name</label>
+                                    <input type="text" id="signup-name" placeholder="Your full name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-email">Email</label>
+                                    <input type="email" id="signup-email" placeholder="you@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-password">Password</label>
+                                    <input type="password" id="signup-password" placeholder="Minimum 8 characters" minlength="8" required>
+                                </div>
+                                <button type="submit" class="btn btn-secondary auth-submit-btn">Request account</button>
+                            </form>
+                        </section>
+                    </div>
+
+                    <div class="auth-links">
+                        <a href="privacy-policy.html">Privacy Policy</a>
+                        <a href="data-deletion.html">Data Deletion</a>
                     </div>
                 </div>
             </div>
@@ -59,7 +109,7 @@
         </main>
     </div>
 
-    <script src="session.js"></script>
+    <script src="auth-client.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

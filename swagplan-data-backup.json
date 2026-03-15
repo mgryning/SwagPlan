@@ -1,0 +1,241 @@
+{
+  "activities": [
+    {
+      "id": "1748951579406",
+      "title": "Loge hygge hos Dysse",
+      "date": "2025-07-05",
+      "responsible": "1748950536702",
+      "notes": "",
+      "participants": [
+        "1748950536702"
+      ],
+      "status": "held",
+      "notifications": {
+        "oneMonth": {
+          "sent": true,
+          "sentAt": "2025-06-04T14:52:19.929Z",
+          "recipients": [
+            "haubo.dyhrberg@gmail.com"
+          ]
+        },
+        "twoWeeks": {
+          "sent": true,
+          "sentAt": "2025-06-20T03:42:45.428Z",
+          "recipients": [
+            "haubo.dyhrberg@gmail.com"
+          ]
+        }
+      }
+    },
+    {
+      "id": "1748951670839",
+      "title": "Loge Activity September 2025",
+      "date": "2025-09-01",
+      "responsible": "1748950226463",
+      "notes": "",
+      "participants": [
+        "1748950226463"
+      ],
+      "status": "held",
+      "notifications": {
+        "twoMonths": {
+          "sent": true,
+          "sentAt": "2025-07-02T03:46:35.589Z",
+          "recipients": [
+            "allankuld@gmail.com"
+          ]
+        },
+        "oneMonth": {
+          "sent": true,
+          "sentAt": "2025-08-01T04:10:25.723Z",
+          "recipients": [
+            "allankuld@gmail.com"
+          ]
+        },
+        "twoWeeks": {
+          "sent": true,
+          "sentAt": "2025-08-17T03:51:23.079Z",
+          "recipients": [
+            "allankuld@gmail.com"
+          ]
+        }
+      }
+    },
+    {
+      "id": "1748951670840",
+      "title": "Loge Activity November 2025",
+      "date": "2025-11-01",
+      "responsible": "1748971887482",
+      "notes": "",
+      "participants": [
+        "1748971887482"
+      ],
+      "status": "held",
+      "notifications": {
+        "twoMonths": {
+          "sent": true,
+          "sentAt": "2025-09-01T03:47:03.223Z",
+          "recipients": [
+            "sket.itu@gmail.com"
+          ]
+        },
+        "oneMonth": {
+          "sent": true,
+          "sentAt": "2025-10-01T03:41:58.827Z",
+          "recipients": [
+            "sket.itu@gmail.com"
+          ]
+        },
+        "twoWeeks": {
+          "sent": true,
+          "sentAt": "2025-10-17T03:33:35.120Z",
+          "recipients": [
+            "sket.itu@gmail.com"
+          ]
+        }
+      }
+    },
+    {
+      "id": "1748951670842",
+      "title": "Loge Activity January 2026",
+      "date": "2026-01-01",
+      "responsible": null,
+      "notes": "",
+      "participants": [],
+      "status": "skipped",
+      "notifications": {}
+    },
+    {
+      "id": "1748951670843",
+      "title": "Loge Activity March 2026",
+      "date": "2026-03-01",
+      "responsible": "1748855843999",
+      "notes": "",
+      "participants": [
+        "1748855843999"
+      ],
+      "status": "planned",
+      "notifications": {
+        "twoMonths": {
+          "sent": true,
+          "sentAt": "2025-12-30T04:00:52.126Z",
+          "recipients": [
+            "mortengryning@gmail.com"
+          ]
+        },
+        "oneMonth": {
+          "sent": true,
+          "sentAt": "2026-01-29T04:27:16.901Z",
+          "recipients": [
+            "mortengryning@gmail.com"
+          ]
+        },
+        "twoWeeks": {
+          "sent": true,
+          "sentAt": "2026-02-14T04:41:52.262Z",
+          "recipients": [
+            "mortengryning@gmail.com"
+          ]
+        }
+      }
+    },
+    {
+      "id": "1748951670844",
+      "title": "Loge Activity May 2026",
+      "date": "2026-05-01",
+      "responsible": "1748950342068",
+      "notes": "",
+      "participants": [
+        "1748950342068"
+      ],
+      "status": "planned",
+      "notifications": {
+        "twoMonths": {
+          "sent": true,
+          "sentAt": "2026-03-01T04:54:31.726Z",
+          "recipients": [
+            "flexscorpion@hotmail.com"
+          ]
+        }
+      }
+    },
+    {
+      "id": "1748951670845",
+      "title": "Loge Activity July 2026",
+      "date": "2026-07-01",
+      "responsible": "1751723170124",
+      "notes": "",
+      "participants": [
+        "1751723170124"
+      ],
+      "status": "planned",
+      "notifications": {}
+    },
+    {
+      "id": "1748951670846",
+      "title": "Loge Activity September 2026",
+      "date": "2026-09-01",
+      "responsible": null,
+      "notes": "",
+      "participants": [],
+      "status": "planned",
+      "notifications": {}
+    }
+  ],
+  "users": [
+    {
+      "id": "1748855843999",
+      "name": "Morten Gryning",
+      "facebookId": "10235335449943189",
+      "email": "mortengryning@gmail.com"
+    },
+    {
+      "id": "1748950226463",
+      "name": "Allan Mejdahl",
+      "facebookId": "10161781398402872",
+      "email": "allankuld@gmail.com"
+    },
+    {
+      "id": "1748950342068",
+      "name": "Christian Curtis Veng",
+      "facebookId": "10163114090889216",
+      "email": "flexscorpion@hotmail.com"
+    },
+    {
+      "id": "1748950536702",
+      "name": "Martin HD",
+      "facebookId": "10236885524855217",
+      "email": "haubo.dyhrberg@gmail.com"
+    },
+    {
+      "id": "1748961961079",
+      "name": "Mikkel Gryning",
+      "facebookId": "10162505366566897",
+      "email": "mikkelgryning@gmail.com"
+    },
+    {
+      "id": "1748971887482",
+      "name": "Stefan Ettrup",
+      "facebookId": "9895262697231193",
+      "email": "sket.itu@gmail.com"
+    },
+    {
+      "id": "1751723170124",
+      "name": "Kris Poulsen",
+      "facebookId": "10161910561007686",
+      "email": "krassusp@gmail.com"
+    },
+    {
+      "id": "1770028554145",
+      "name": "MunchAndMinglePastries",
+      "facebookId": "44902459033754",
+      "email": "exidchyolk_1685728348@tfbnw.net"
+    },
+    {
+      "id": "1772781244556",
+      "name": "Helen Rumbleescu",
+      "facebookId": "28502475538995",
+      "email": "silvesterlim+1748489863_oqyn@meta.com"
+    }
+  ]
+}
