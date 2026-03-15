@@ -105,6 +105,7 @@ function renderActivities() {
     overviewUpcomingCount.textContent = String(upcomingActivities.length);
     overviewOpenCount.textContent = String(openResponsibilities);
     overviewHeldCount.textContent = String(heldActivities.length);
+    overviewOpenCount.closest('.overview-stat-card').classList.toggle('needs-attention', openResponsibilities > 0);
     upcomingColumnCount.textContent = String(upcomingActivities.length);
     heldColumnCount.textContent = String(heldActivities.length);
 

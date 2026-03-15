@@ -384,11 +384,29 @@ main {
     line-height: 1;
 }
 
+.overview-stat-card.needs-attention {
+    background: rgba(255, 242, 228, 0.95);
+    border-color: rgba(210, 120, 60, 0.24);
+}
+
+.overview-stat-card.needs-attention .overview-stat-label {
+    color: #b85f20;
+}
+
+.overview-stat-card.needs-attention .overview-stat-value {
+    color: #a34e14;
+}
+
 .activities-columns {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
     gap: 18px;
     margin-top: 0;
+    transition: grid-template-columns 0.2s ease;
+}
+
+.activities-columns:has(.archive-column.collapsed) {
+    grid-template-columns: 1fr auto;
 }
 
 .activities-column {
@@ -418,14 +436,6 @@ main {
     gap: 10px;
 }
 
-.activities-column h3:before {
-    content: "📋";
-    font-size: 1rem;
-}
-
-.activities-column:last-child h3:before {
-    content: "🏆";
-}
 
 .column-count {
     background: #eef2f4;
@@ -469,6 +479,14 @@ main {
 
 .activities-column.collapsed #held-activities-list {
     display: none;
+}
+
+.activities-column.collapsed {
+    padding: 18px 14px;
+}
+
+.activities-column.collapsed h3 {
+    white-space: nowrap;
 }
 
 @keyframes slideInUp {
@@ -955,12 +973,10 @@ main {
 }
 
 .empty-state {
-    text-align: center;
-    color: #7f8c8d;
-    padding: 2rem;
-    background: rgba(242, 245, 247, 0.72);
-    border: 1px dashed rgba(102, 122, 135, 0.22);
-    border-radius: 18px;
+    color: #96a6b0;
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: 8px 2px;
 }
 
 
